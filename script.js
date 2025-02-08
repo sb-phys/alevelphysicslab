@@ -14,8 +14,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
         let intensity = parseFloat(intensityInput.value);
         let workFunction = parseFloat(metalSelect.value);
 
-        let photonEnergy = (6.626e-34 * frequency) / 1.60218e-19; // eV
-        let thresholdFrequency = workFunction / 6.626e-34;
+        // Photon energy in eV
+        let photonEnergy = (6.626e-34 * frequency) / 1.60218e-19;
+
+        // Threshold frequency in Hz (convert eV → J before dividing by Planck's constant)
+        let thresholdFrequency = (workFunction * 1.60218e-19) / 6.626e-34;
+
         let electronEnergy = photonEnergy - workFunction;
 
         freqValue.textContent = `${(frequency / 1e12).toFixed(2)} x 10^12 Hz`;
@@ -23,8 +27,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
         photonEnergySpan.textContent = photonEnergy.toFixed(2);
         electronEnergySpan.textContent = electronEnergy > 0 ? electronEnergy.toFixed(2) : 0;
 
-        // Format the threshold frequency without repeating the multiplier
-        let thresholdFrequencyFormatted = (thresholdFrequency).toExponential(2); // Scientific notation
+        // Display threshold frequency in scientific notation
+        let thresholdFrequencyFormatted = thresholdFrequency.toExponential(2);
         thresholdFrequencySpan.textContent = `${thresholdFrequencyFormatted} Hz`;
     }
 
@@ -43,28 +47,29 @@ document.addEventListener('DOMContentLoaded', (event) => {
         clearInterval(simulationInterval);
     };
 
+    // Always emit photons, regardless of energy
     function emitPhotons() {
         let frequency = parseFloat(frequencyInput.value);
         let intensity = parseFloat(intensityInput.value);
         let workFunction = parseFloat(metalSelect.value);
         let photonEnergy = (6.626e-34 * frequency) / 1.60218e-19; // eV
 
-        if (photonEnergy > workFunction) {
-            emitPhoton();
-        }
+        // Call emitPhoton unconditionally
+        emitPhoton(photonEnergy, workFunction);
 
         simulationInterval = setTimeout(emitPhotons, 1000 / intensity);
     }
 
-    function emitPhoton() {
+    // Pass photonEnergy and workFunction to decide if electron should be emitted
+    function emitPhoton(photonEnergy, workFunction) {
         let svg = document.getElementById('photoelectric-svg');
-        
+
         // Create a yellow circle to represent the photon
         let photon = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
         photon.setAttribute('cx', 100);
         photon.setAttribute('cy', 100);
         photon.setAttribute('r', 5);
-        photon.setAttribute('fill', '#FFD700'); // Yellow color
+        photon.setAttribute('fill', '#FFD700'); // Yellow
         svg.appendChild(photon);
 
         let distance = 300;
@@ -76,10 +81,15 @@ document.addEventListener('DOMContentLoaded', (event) => {
             let progress = timestamp - startTime;
             let x = Math.min(100 + (progress / duration) * distance, 400);
             photon.setAttribute('cx', x);
+
+            // Continue moving photon until it reaches x=400
             if (x < 400) {
                 requestAnimationFrame(animatePhoton);
             } else {
-                emitElectron();
+                // Photon hits the metal; decide if electron is emitted
+                if (photonEnergy > workFunction) {
+                    emitElectron();
+                }
                 svg.removeChild(photon);
             }
         }
@@ -93,7 +103,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         electron.setAttribute('cx', 400);
         electron.setAttribute('cy', 100);
         electron.setAttribute('r', 5);
-        electron.setAttribute('fill', '#0000FF'); // Blue color for electron
+        electron.setAttribute('fill', '#0000FF'); // Blue
         svg.appendChild(electron);
 
         let distance = 100;
@@ -105,6 +115,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             let progress = timestamp - startTime;
             let x = Math.max(400 - (progress / duration) * distance, 300);
             electron.setAttribute('cx', x);
+
             if (x > 300) {
                 requestAnimationFrame(animateElectron);
             } else {
@@ -115,9 +126,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
         requestAnimationFrame(animateElectron);
     }
 
+    // Initialize the displayed values once page loads
     updateValues();
 });
 
+// -------------------------------------------
+// Additional page navigation functions
+// -------------------------------------------
 function showHome() {
     document.getElementById('homeContent').style.display = 'block';
     document.getElementById('year12Content').style.display = 'none';
