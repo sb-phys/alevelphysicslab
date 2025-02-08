@@ -166,3 +166,4 @@ function toggleMenu() {
         sideNav.style.width = "250px";
     }
 }
+
