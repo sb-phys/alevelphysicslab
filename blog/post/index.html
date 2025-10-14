@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ALP Blog • Post</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header>
+  <div class="menu-btn" onclick="toggleMenu()">☰</div>
+  <div class="side-nav" id="side-nav">
+    <a href="javascript:void(0)" class="closebtn" onclick="toggleMenu()">&times;</a>
+    <div class="logo-placeholder">
+      <a href="/index.html" class="home-btn">Back to Home</a>
+    </div>
+    <a href="/index.html#year12">Year 12</a>
+    <a href="/index.html#year13">Year 13</a>
+  </div>
+  <h1>AlevelPhysicsLab</h1>
+</header>
+
+<main>
+  <div class="content" id="postContent">
+    <article class="blog-post">
+      <h2 id="postTitle">Post Title</h2>
+      <p id="postMeta" style="margin-top:-4px; opacity:.8;">Date • Tags</p>
+      <div id="postBody">
+        <p>Loading post...</p>
+      </div>
+      <br />
+      <a href="/blog/posts/" class="blog-link">← Back to Blog</a>
+    </article>
+  </div>
+
+  <aside class="sidebar">
+    <h2>About the Blog</h2>
+    <p>New post every week. Study notes, simulation breakdowns, and exam strategies.</p>
+  </aside>
+</main>
+
+<!-- 🔗 Shared data file -->
+<script src="/blog/posts-data.js"></script>
+
+<!-- ⚙️ Inline script to load the post -->
+<script>
+  function toggleMenu() {
+    const sideNav = document.getElementById('side-nav');
+    sideNav.style.width = (sideNav.style.width === '250px') ? '0' : '250px';
+  }
+
+  function getSlug() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("slug");
+  }
+
+  const slug = getSlug();
+  const post = window.getPostBySlug ? window.getPostBySlug(slug) : null;
+
+  if (!post) {
+    document.getElementById('postContent').innerHTML = '<p>Post not found.</p>';
+  } else {
+    document.getElementById('postTitle').textContent = post.title;
+    document.getElementById('postMeta').textContent = `${post.date} • ${post.tags.join(", ")}`;
+    document.getElementById('postBody').innerHTML = post.content;
+  }
+</script>
+
+</body>
+</html>
