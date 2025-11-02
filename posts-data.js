@@ -1,57 +1,60 @@
-// /blog/posts-data.js — shared blog data for both pages
+// blog/posts-data.js — single source of truth for the blog
 
-window.POSTS = [
+// One clean array with just your new post
+const POSTS = [
   {
-    title: "Understanding the Photoelectric Effect",
-    slug: "2025-10-13-photoelectric-effect",
-    date: "2025-10-13",
-    tags: ["quantum", "year12", "practicals"],
+    slug: "medical-imaging-xrays-ct-basics",
+    title: "Medical Imaging: X-ray Radiography & CT — Physics Explained",
+    date: "2025-11-02",
+    tags: ["Medical Imaging", "X-rays", "CT", "A-level"],
     excerpt:
-      "Threshold frequency, work function, and why intensity alone can’t eject electrons below f₀.",
+      "From X-ray tube physics (bremsstrahlung vs characteristic) to how CT scanners form images, plus the key interactions in tissue.",
     content: `
-      <p>The photoelectric effect shows light behaves as photons with energy <em>E = hf</em>.
-      Electrons are emitted only if photon energy exceeds the metal's work function &phi;.
-      We’ll connect this to your simulation and exam-style graph questions.</p>
-      <h3>Key ideas</h3>
-      <ul>
-        <li>Threshold frequency: <code>f₀ = φ / h</code></li>
-        <li>Kinetic energy: <code>KE_max = hf − φ</code></li>
-        <li>Intensity controls number of emitted electrons (if f ≥ f₀)</li>
-      </ul>
-    `
-  },
-  {
-    title: "Core Practicals: Reducing Uncertainty Like a Pro",
-    slug: "2025-10-20-uncertainty-tips",
-    date: "2025-10-20",
-    tags: ["practicals", "skills"],
-    excerpt:
-      "Practical tricks to cut random error and tighten gradient/intercept estimates for top marks.",
-    content: `
-      <p>Small changes in setup produce big gains in data quality. We'll cover repeat readings,
-      range expansion, and linearisation so your gradient carries real punch in the analysis.</p>
-      <ol>
-        <li>Wider range of the independent variable</li>
-        <li>Repeated trials & mean with uncertainty</li>
-        <li>Use of appropriate graph scales and best-fit line</li>
-      </ol>
-    `
-  },
-  {
-    title: "EM Waves: Visualising E and B in Phase",
-    slug: "2025-10-27-em-waves-in-phase",
-    date: "2025-10-27",
-    tags: ["waves", "fields"],
-    excerpt:
-      "What ‘mutually perpendicular’ really means, and how to sketch fields cleanly for marks.",
-    content: `
-      <p>Electric and magnetic fields oscillate perpendicular to each other and to the direction
-      of propagation. We'll fix the most common sketching mistakes and link to intensity ∝ E².</p>
+      <h2>Medical Imaging</h2>
+      <p>Medical imaging lets us observe the interior of the body for diagnosis and clinical decision-making. Here we unpack the physics behind X-ray radiography and CT, and the core interactions X-rays undergo in tissue.</p>
+
+      <h3>X-ray Radiography</h3>
+      <p>X-ray radiography uses high-energy photons to create images of internal structures (e.g., bones, tumours). The heart of the system is the X-ray tube: a vacuum glass envelope with a heated <em>cathode</em> and a metal <em>anode</em> placed opposite each other.</p>
+
+      <h3>The basics: how X-rays are produced</h3>
+      <p>Heat the cathode → <em>thermionic emission</em> releases electrons → apply a high voltage so electrons accelerate toward the anode. When these high-speed electrons strike the anode target, they decelerate and/or interact with atomic shells, producing X-rays.</p>
+
+      <p style="text-align:center"><img src="../First blog/xraytube.png" alt="X-ray tube diagram"></p>
+
+      <h3>Deeper look</h3>
+      <p>The applied tube voltage sets a strong electric field that gives electrons large kinetic energies. As electrons approach the anode’s positively charged nuclei, they are deflected and decelerate. This rapid deceleration emits photons: that’s <strong>bremsstrahlung</strong> (braking radiation). Electrons can also knock out inner-shell electrons in the anode; when higher-level electrons drop down to fill the vacancy, they emit <strong>characteristic X-rays</strong> with discrete energies.</p>
+
+      <p style="text-align:center"><img src="../First blog/electrondiffraction.png" alt="Electron deflection near a nucleus"></p>
+
+      <p>Bremsstrahlung yields a broad spectrum of X-ray energies, while characteristic X-rays appear as sharp lines at specific energies set by the target material.</p>
+
+      <h3>CT scans: using X-rays to make cross-sections</h3>
+      <p>In CT (Computed Tomography), an X-ray source and detector array rotate around the patient. Multiple projections are collected at many angles. Algorithms reconstruct these into cross-sectional images, showing how different tissues attenuate X-rays.</p>
+
+      <p style="text-align:center"><img src="../First blog/ctscanner.png" alt="CT scanner schematic"></p>
+
+      <h3>How X-rays interact with tissue</h3>
+      <p>In the diagnostic energy range, three interactions matter most:</p>
+
+      <p><strong>1) Photoelectric effect</strong> — a photon transfers all its energy to an atomic electron, ejecting it (a <em>photoelectron</em>). Vacancies in inner shells are later filled, emitting either characteristic X-rays or Auger electrons. Dominant at lower diagnostic energies; increases strongly with atomic number.</p>
+      <p style="text-align:center"><img src="../First blog/photoelectriceffect.png" alt="Photoelectric effect diagram"></p>
+
+      <p><strong>2) Compton scattering</strong> — the photon transfers part of its energy to an electron and changes direction with reduced energy. Dominant at intermediate energies and contributes to scatter noise.</p>
+      <p style="text-align:center"><img src="../First blog/comptonscattering.png" alt="Compton scatter diagram"></p>
+
+      <p><strong>3) Pair production</strong> — above 1.022 MeV, a photon can convert to an electron–positron pair near a nucleus. Above standard CT energies; relevant to PET and high-energy therapy beams.</p>
+      <p style="text-align:center"><img src="../First blog/pairproduction.png" alt="Pair production diagram"></p>
+
+      <h3>Tying it together</h3>
+      <p>Photoelectric absorption boosts contrast for high-Z materials (bone, contrast agents). Compton dominates soft-tissue ranges and spreads dose; pair production explains PET annihilation photons.</p>
+      <p style="text-align:center"><img src="../First blog/annihilation.png" alt="Annihilation to two photons"></p>
+
+      <p>Rule of thumb: higher kVp hardens the spectrum (more penetration, less photoelectric contrast); mAs controls photon <em>number</em> (dose) without changing photon energy.</p>
     `
   }
 ];
 
-// Helper for the post page
-window.getPostBySlug = function (slug) {
-  return (window.POSTS || []).find(p => p.slug === slug);
-};
+// Helpers so BOTH pages can read posts no matter which pattern they use
+window.POSTS = POSTS;
+window.getAllPosts = () => POSTS.slice().sort((a, b) => (a.date < b.date ? 1 : -1));
+window.getPostBySlug = (slug) => POSTS.find(p => p.slug === slug) || null;
