@@ -6,7 +6,7 @@ const POSTS = [
     slug: "medical-imaging-xrays-ct-basics",
     title: "Medical Imaging: X-ray Radiography & CT — Physics Explained",
     date: "2025-11-02",
-    tags: ["Medical Imaging", "X-rays", "CT", "A-level"],
+    tags: ["Medical Imaging", "X-rays", "CT",],
     excerpt:
       "From X-ray tube physics (bremsstrahlung vs characteristic) to how CT scanners form images, plus the key interactions in tissue.",
     content: `
@@ -58,3 +58,4 @@ const POSTS = [
 window.POSTS = POSTS;
 window.getAllPosts = () => POSTS.slice().sort((a, b) => (a.date < b.date ? 1 : -1));
 window.getPostBySlug = (slug) => POSTS.find(p => p.slug === slug) || null;
+
