@@ -254,3 +254,21 @@ main {
     color: white;
     border-color: #A67C3B;
 }
+
+/* Blog post layout fixes */
+.blog-post {
+  overflow: hidden;              /* prevent any sneaky overflow */
+}
+
+.blog-post img {
+  max-width: 100%;               /* never wider than the text column */
+  height: auto;                  /* keep aspect ratio */
+  display: block;                /* get rid of baseline gaps */
+  margin: 16px auto;             /* nice breathing room + center */
+  border-radius: 6px;            /* optional: softer look */
+}
+
+/* (Optional) make the article box give images some space */
+#postContent {
+  padding-bottom: 24px;
+}
